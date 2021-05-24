@@ -9,6 +9,22 @@ def get_all_articles():
     return render_template('vitality/articles.html')
 
 
+#     articles = Article.query.all()
+#     articles_list = {'articles_list': []}
+#     for article in articles:
+#         articles_list['articles_list'].append({'id': article.id, 'text': article.text, 'name': article.name})
+#     return jsonify(articles_list), 200
+
+@app.route('/articles/<article_id>', methods=['GET'])
+@auth.login_required
+def get_article_by_id(article_id):
+    return render_template('vitality/article.html')
+    # article = Article.query.filter_by(id=article_id).first()
+    # if article is None:
+    #     return jsonify(status='article not found'), 404
+    # return jsonify(article={'id': article.id, 'text': article.text, 'name': article.name}), 200
+
+
 @app.route('/about', methods=['GET'])
 # @auth.login_required
 def about():
@@ -19,16 +35,6 @@ def about():
 # @auth.login_required
 def contact():
     return render_template('vitality/contact.html')
-
-
-@app.route('/articles/<article_id>', methods=['GET'])
-@auth.login_required
-def get_article_by_id(article_id):
-    return render_template('vitality/article.html')
-    # article = Article.query.filter_by(id=article_id).first()
-    # if article is None:
-    #     return jsonify(status='article not found'), 404
-    # return jsonify(article={'id': article.id, 'text': article.text, 'name': article.name}), 200
 
 # @app.route('/articles', methods=['GET'])
 # @auth.login_required
