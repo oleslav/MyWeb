@@ -6,7 +6,7 @@ from db_functionality import *
 
 @app.route('/', methods=['GET'])
 def index():
-    return render_template('vitality/creative.html')
+    return render_template('vitality/index.html')
 
 
 @app.route('/blog', methods=['GET'])
@@ -81,9 +81,9 @@ def unauthorized():
     return render_template('error/error_page.html', number=401, message="Unauthorized access")
 
 
-@app.errorhandler(404)
-def page_not_found(e):
-    return render_template('error/error_page.html', number=404, message="Not found")
+# @app.errorhandler(404)
+# def page_not_found(e):
+#     return render_template('error/error_page.html', number=404, message="Not found")
 
 # ########### That functionality may be discarded ########### #
 #

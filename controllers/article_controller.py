@@ -6,7 +6,7 @@ from flask import request, jsonify, json, render_template
 @app.route('/articles', methods=['GET'])
 # @auth.login_required
 def get_all_articles():
-    return render_template('vitality/creative.html')
+    return render_template('vitality/articles.html')
 
 
 @app.route('/about', methods=['GET'])
@@ -24,7 +24,7 @@ def contact():
 @app.route('/articles/<article_id>', methods=['GET'])
 @auth.login_required
 def get_article_by_id(article_id):
-    return render_template('blog/post.html')
+    return render_template('vitality/article.html')
     # article = Article.query.filter_by(id=article_id).first()
     # if article is None:
     #     return jsonify(status='article not found'), 404
