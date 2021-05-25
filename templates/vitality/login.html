@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="description" content="">
     <meta name="author" content="">
-    <title>Vitality</title>
+    <title>Login</title>
     <!-- Bootstrap Core CSS -->
     <link href="{{ url_for('static', filename='vitality/assets/css/bootstrap/bootstrap.min.css') }}" rel="stylesheet" type="text/css">
     <link href="assets/css/bootstrap/bootstrap.min.css" rel="stylesheet" type="text/css">
@@ -59,6 +59,7 @@
                     <img src="assets/img/creative/logo.png" class="img-responsive" alt="">
                 </a>
             </div>
+            <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav navbar-right">
                     <li class="hidden">
@@ -74,13 +75,13 @@
                         <a class="page-scroll" href="/contact">Contact</a>
                     </li>
                     <li>
-                        <a class="page-scroll" href="#signup">Sign up</a>
+                        <a class="page-scroll" href="#login">Log in</a>
                     </li>
                 </ul>
             </div>
         </div>
     </nav>
-    <section id="signup">
+    <section id="login">
         <div class="container wow fadeIn">
             <div class="row">
                 <div class="col-md-6">
@@ -89,34 +90,9 @@
                 </div>
                 <div class="col-md-6 text-center">
 
-                    <h1>Sign up</h1>
+                    <h1>Log in</h1>
                     <hr class="colored">
                     <form action="" method="post" class="form-signin text-center">
-
-                            {% if message|length %}
-                                {% if error == False %}
-
-                                    <br/>
-                                    <div class="alert alert-success">
-                                        <a href="/login" class="close" data-dismiss="alert"
-                                           aria-label="close">×</a>
-                                        <strong>Success!</strong><br/>
-                                        {{message}}
-                                    </div>
-
-                                {% else %}
-
-                                    <br/>
-                                    <div class="alert alert-danger">
-                                        <a href="/login" class="close" data-dismiss="alert"
-                                           aria-label="close">×</a>
-                                        <strong>Error!</strong><br/>
-                                        {{message}}
-                                    </div>
-
-                                {% endif %}
-                            {% endif %}
-
                             <p>
                                 <label for="username">Username</label>
                                 <input type="text" name="username" class="form-control">
@@ -126,7 +102,7 @@
                                 <input type="password" name="password" class="form-control">
                             </p>
                             <button type="submit" class="btn btn-primary">
-                                Sign up
+                                Log in
                             </button>
                         </form>
 
