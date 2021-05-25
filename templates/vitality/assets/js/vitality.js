@@ -32,7 +32,7 @@
     });
 
     // Owl Carousel Settings
-    $(".about-carousel").owlCarousel({
+    $(".info-carousel").owlCarousel({
         items: 3,
         navigation: true,
         pagination: false,

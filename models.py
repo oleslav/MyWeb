@@ -30,7 +30,7 @@ class Article(db.Model):
     __tablename__ = 'article'
 
     id = db.Column('id', db.INTEGER, primary_key=True)
-    name = db.Column('name', db.VARCHAR(20), nullable=False)
+    name = db.Column('name', db.VARCHAR(100), nullable=False)
     text = db.Column('text', db.TEXT(2000), nullable=False)
 
 

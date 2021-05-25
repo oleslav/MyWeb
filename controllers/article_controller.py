@@ -1,4 +1,4 @@
-from config import app, auth, db
+from config import *
 from models import *
 from flask import request, jsonify, json, render_template
 
@@ -6,35 +6,45 @@ from flask import request, jsonify, json, render_template
 @app.route('/articles', methods=['GET'])
 # @auth.login_required
 def get_all_articles():
-    return render_template('vitality/articles.html')
+    response = {'status': True, 'articles': []}
+    for article in Article.query.limit(15).all():
+        response["articles"].append({
+            "id": article.id,
+            "name": article.name,
+            "text": article.text
+        })
+    return jsonify(response), 200
 
-
-#     articles = Article.query.all()
-#     articles_list = {'articles_list': []}
-#     for article in articles:
-#         articles_list['articles_list'].append({'id': article.id, 'text': article.text, 'name': article.name})
-#     return jsonify(articles_list), 200
 
 @app.route('/articles/<article_id>', methods=['GET'])
 @auth.login_required
 def get_article_by_id(article_id):
-    return render_template('vitality/article.html')
-    # article = Article.query.filter_by(id=article_id).first()
-    # if article is None:
-    #     return jsonify(status='article not found'), 404
-    # return jsonify(article={'id': article.id, 'text': article.text, 'name': article.name}), 200
+    response = {'status': True, 'article': []}
+
+    article = Article.query.filter_by(id=article_id).first()
+
+    if article is None:
+        return jsonify({'status': False, 'article': []}), 404
+
+    response["article"].append({
+        "id": article.id,
+        "name": article.name,
+        "text": article.text
+    })
+
+    return jsonify(response), 200
 
 
-@app.route('/about', methods=['GET'])
+@app.route('/info', methods=['GET'])
 # @auth.login_required
 def about():
-    return render_template('vitality/about.html')
+    return render_template('vitality/info/about.html')
 
 
 @app.route('/contact', methods=['GET'])
 # @auth.login_required
 def contact():
-    return render_template('vitality/contact.html')
+    return render_template('vitality/info/contact.html')
 
 # @app.route('/articles', methods=['GET'])
 # @auth.login_required

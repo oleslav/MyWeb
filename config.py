@@ -1,9 +1,11 @@
 from flask import Flask
+from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
 from flask_httpauth import HTTPBasicAuth
 
 
 app = Flask(__name__)
+CORS(app)
 auth = HTTPBasicAuth()
 app.debug = True
 app.config['SECRET_KEY'] = 'secret key'
