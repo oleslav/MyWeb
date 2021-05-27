@@ -1,39 +1,45 @@
 from config import *
-from flask import request, render_template, redirect, jsonify
+from flask import request, jsonify
 from werkzeug.security import generate_password_hash, check_password_hash
 from db_functionality import *
 
 
 @app.route('/', methods=['GET'])
 def index():
-    return render_template('vitality/index.html')
+    return jsonify('index.html')
 
 
 @app.route('/login', methods=['GET'])
 def login():
-    return render_template('vitality/authentification/login.html')
+    return jsonify('login.html')
 
 
 @app.route('/logout', methods=['GET'])
 def logout():
-    return render_template('vitality/authentification/login.html', error=False,
-                           message="You have been successfully logout")
+    return jsonify('login.html')
 
 
 @app.route('/signup', methods=['GET'])
 def signup():
-    return render_template('vitality/authentification/signup.html')
+    return jsonify('signup.html')
+
+
+@app.route('/verify', methods=['GET'])
+@auth.login_required
+def verify():
+    user_email = auth.current_user()
+    user = get_user_by_email(user_email)
+    return jsonify(id=user.id, name=user.userName, email=user.email), 200
 
 
 @app.route('/signup', methods=['POST'])
 def signup_post():
-    email = request.form.get('username')
+    email = request.json.get('email', None)
 
     if not get_user_by_email(email) is None:
-        return render_template('vitality/authentification/signup.html', error=True,
-                               message="Account with this email already exists")
+        return jsonify(status='Email already used'), 400
 
-    password = request.form.get('password')
+    password = request.json.get('password', None)
     username = email
     role = RoleEnum.user
 
@@ -41,30 +47,36 @@ def signup_post():
         new_user = User(user_name=username, email=email, password=generate_password_hash(password), role=role)
         db.session.add(new_user)
         db.session.commit()
-        return redirect("/articles")
-    else:
-        return render_template('vitality/authentification/signup.html', error=True,
-                               message="Oops, fields are incorrect")
+        return jsonify(status='User successfully created'), 201
+
+    return jsonify(status='Oops, some fields are incorrect'), 400
 
 
 @app.route('/login', methods=['POST'])
 def login_post():
-    email = request.form.get('username')
+    email = request.json.get('email', None)
+
+    if email is None:
+        return jsonify(status='No email'), 400
+
+    password = request.json.get('password', None)
+
+    if password is None:
+        return jsonify(status='No password'), 400
+
     user = get_user_by_email(email)
 
     if user is None:
-        return render_template('vitality/authentification/login.html', error=True, message="Credential are wrong")
-
-    password = request.form.get('password')
+        return jsonify(status='Credential are wrong'), 400
 
     if check_password_hash(user.password, password):
-        return redirect("/articles")
+        return jsonify(status='Successfully login'), 200
     else:
-        return render_template('vitality/authentification/login.html', error=True, message="Credential are wrong")
+        return jsonify(status='Credential are wrong'), 400
 
 
 @app.route('/users', methods=['GET'])
-# @auth.login_required
+@auth.login_required
 def get_all_users():
     result = {}
     users = []
@@ -82,7 +94,7 @@ def get_all_users():
 def verify_password(email, password):
     if not (email and password):
         return False
-    user_test = User.query.filter_by(email=email).first()
+    user_test = get_user_by_email(email)
     if user_test is None:
         return False
     else:
@@ -91,4 +103,4 @@ def verify_password(email, password):
 
 @auth.error_handler
 def unauthorized():
-    return render_template('error/error_page.html', number=401, message="Unauthorized access")
+    return jsonify(message="Unauthorized access"), 401

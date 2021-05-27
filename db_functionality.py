@@ -1,6 +1,11 @@
 from models import *
 
 
+def check_moderator(user_email):
+    user = User.query.filter_by(email=user_email).first()
+    return not (user.role != 'moderator' or user is None)
+
+
 def get_user_by_email(email):
     return User.query.filter_by(email=email).first()
 

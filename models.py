@@ -1,6 +1,4 @@
-import sqlalchemy
 from config import db
-from werkzeug.security import generate_password_hash
 import enum
 
 
@@ -35,6 +33,7 @@ class Article(db.Model):
 
 
 class StatusEnum(enum.Enum):
+    created = 'created'
     pending = 'pending'
     done = 'done'
 
