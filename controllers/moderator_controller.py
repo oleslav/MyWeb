@@ -1,3 +1,5 @@
+from flask_cors import cross_origin
+
 from config import *
 from db_functionality import check_moderator
 from models import *
@@ -32,15 +34,20 @@ def change_particle_by_id(particle_id):
 
 
 @app.route('/moderator/particles', methods=['GET'])
+@cross_origin(origin='localhost', headers=['Content-Type', 'Authorization'])
 @auth.login_required
 def get_pending_articles():
     if not check_moderator(auth.current_user()):
         return jsonify(status='You have no permission to do this'), 404
 
-    p_articles = PArticle.query.filter_by(status=StatusEnum.pending).limit(10).all()
+    p_articles1 = PArticle.query.filter_by(status=StatusEnum.pending).limit(10).all()
+    p_articles2 = PArticle.query.filter_by(status=StatusEnum.created).limit(10).all()
     p_articles_list = {'particles': []}
 
-    for p_article in p_articles:
+    for p_article in p_articles1:
+        p_articles_list['particles'].append({'id': p_article.id, 'text': p_article.text, 'name': p_article.name})
+
+    for p_article in p_articles2:
         p_articles_list['particles'].append({'id': p_article.id, 'text': p_article.text, 'name': p_article.name})
 
     return jsonify(p_articles_list), 200

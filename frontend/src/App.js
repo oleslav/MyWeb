@@ -9,6 +9,9 @@ import Contact from "./info/Contact";
 import Login from "./authentification/Login";
 import Signup from "./authentification/Signup";
 import Index from "./info/Index";
+import CreateArticle from "./article/Create";
+import Particles from "./particles/Particles";
+import Particle from "./particles/Particle";
 
 function App() {
     return (
@@ -21,12 +24,11 @@ function App() {
                 <Route path='/signup' component={Signup}/>
                 <Route path='/about' component={About}/>
                 <Route path='/contact' component={Contact}/>
-                <Route path='/articles' component={Articles} exact/>
+                <Route path='/articles/make' component={CreateArticle}/>
                 <Route path='/articles/:id' component={Article}/>
-                {/*<Router>*/}
-                {/*    <Article path='/articles/:id' />*/}
-                {/*</Router>*/}
-
+                <Route path='/articles' component={Articles} exact/>
+                <Route path='/particles/:id' component={Particle}/>
+                <Route path='/particles' component={Particles} exact/>
             </Switch>
         </Router>
     </div>);

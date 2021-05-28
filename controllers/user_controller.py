@@ -1,3 +1,5 @@
+from flask_cors import cross_origin
+
 from config import *
 from flask import request, jsonify
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -33,6 +35,7 @@ def verify():
 
 
 @app.route('/signup', methods=['POST'])
+@cross_origin(origin='localhost')
 def signup_post():
     email = request.json.get('email', None)
 
@@ -53,6 +56,7 @@ def signup_post():
 
 
 @app.route('/login', methods=['POST'])
+@cross_origin(origin='localhost', headers=['Content-Type', 'Authorization'])
 def login_post():
     email = request.json.get('email', None)
 
@@ -76,6 +80,7 @@ def login_post():
 
 
 @app.route('/users', methods=['GET'])
+@cross_origin(origin='localhost', headers=['Content-Type', 'Authorization'])
 @auth.login_required
 def get_all_users():
     result = {}
@@ -90,6 +95,20 @@ def get_all_users():
     return jsonify(result), 200
 
 
+@app.route('/current_user', methods=['GET'])
+@cross_origin(origin='localhost', headers=['Content-Type', 'Authorization'])
+@auth.login_required
+def get_current_user():
+    user = get_user_by_email(auth.current_user())
+    if user.role == RoleEnum.user:
+        role = 'user'
+    elif user.role == RoleEnum.moderator:
+        role = 'moderator'
+    else:
+        role = 'unknown'
+    return jsonify({"id": user.id, "name": user.userName, "email": user.userName, "role": role}), 200
+
+
 @auth.verify_password
 def verify_password(email, password):
     if not (email and password):
@@ -102,5 +121,5 @@ def verify_password(email, password):
 
 
 @auth.error_handler
-def unauthorized():
-    return jsonify(message="Unauthorized access"), 401
+def unauthorized(e):
+    return jsonify(message="Unauthorized access", error=e), 401

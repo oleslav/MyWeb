@@ -41,7 +41,7 @@ export default class Login extends Component {
             }).then(data => {
             if(this.state.status !== 200){
                 this.setState({isAlert: true});
-                scope.setState({message: data.status});
+                this.setState({message: data.status});
             }
         }).catch((e) => {
             console.log(e);
