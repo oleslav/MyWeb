@@ -1,6 +1,9 @@
+from flask_cors import cross_origin
+
 from config import *
-from db_functionality import check_moderator
+from db_functionality import *
 from models import *
+from werkzeug.security import check_password_hash
 from flask import request, jsonify
 
 
@@ -49,6 +52,7 @@ def contact():
 
 
 @app.route('/articles', methods=['POST'])
+@cross_origin(origin='localhost', headers=['Content-Type', 'Authorization'])
 @auth.login_required
 def add_article():
     name = request.json.get('name', None)
